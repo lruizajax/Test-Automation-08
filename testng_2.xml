@@ -8,6 +8,9 @@
 
     <test name="Home Page Test" thread-count="5">
         <classes>
+            <class name="com.store.tests.HomeTest"/>
+            <class name="com.store.tests.RegisterTest"/>
+            <class name="com.store.tests.LoginTest"/>
             <class name="com.store.tests.ProductTest"/>
             <class name="com.store.tests.CartTest"/>
             <class name="com.store.tests.CheckoutTest"/>
