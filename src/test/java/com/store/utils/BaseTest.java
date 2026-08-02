@@ -32,24 +32,10 @@ public class BaseTest {
     protected DBValidation dbValidation;
 
     @BeforeMethod
-    @Parameters({"browser"})
-    public void setup(String browser) throws MalformedURLException {
-
-        URL gridul = new URL("http://localhost:4444/wd/hub");
-
-        switch (browser.toLowerCase()) {
-            case "chrome":
-                driver = new RemoteWebDriver(gridul, new ChromeOptions());
-                break;
-            case "edge":
-                driver = new RemoteWebDriver(gridul, new EdgeOptions());
-                break;
-            case "firefox":
-                driver = new RemoteWebDriver(gridul, new FirefoxOptions());
-            default:
-                throw new IllegalArgumentException("Browser not supported: " + browser);
-        }
-
+    public void setup()  {
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless=new");
+        driver = new ChromeDriver(chromeOptions);
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(TIME_OUT));
         driver.get(URL);
