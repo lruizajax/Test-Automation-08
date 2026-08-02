@@ -1,3 +1,5 @@
 "BROKEN","CATEGORY","FAILED","PASSED","SKIPPED","UNKNOWN"
-"0","Passed tests","0","16","0","0"
-"0","Skipped tests","0","0","1","0"
+"0","Product defects","1","0","0","0"
+"2","Broken tests","0","0","0","0"
+"0","Passed tests","0","32","0","0"
+"0","Skipped tests","0","0","2","0"
