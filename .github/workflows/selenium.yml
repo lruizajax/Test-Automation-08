@@ -1,0 +1,84 @@
+name: Selenium Tests suite with GitHub Actions
+on:
+  push:
+    branches: ["master"]
+
+  permissions:
+    contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Verify Java installation
+        run: java -version
+
+      - name: Set up Maven
+        uses: actions/cache@v5
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Verify Maven installation
+        run: mvn -version
+
+      - name: Install Allure
+        run: |
+          ALLURE_VERSION=2.44.1
+          wget https://github.com/allure-framework/allure2/releases/download/${ALLURE_VERSION}/allure-${ALLURE_VERSION}.tgz
+          tar -zxvf allure-${ALLURE_VERSION}.tgz
+          echo "$PWD/allure-${ALLURE_VERSION}/bin" >> $GITHUB_PATH
+
+      - name: Verify Allure installation
+        run: allure --version
+
+      - name: Start Selenium Grid
+        run: docker compose -p selenium up -d
+
+      - name: Show running containers
+        run: docker ps -a
+
+      - name: Show selenium logs
+        run: docker compose logs
+
+      - name: Wait for Selenium Grid to be ready
+        run: |
+          echo "Waiting for Selenium Grid to be ready..."
+          until curl -s http://localhost:4444/wd/hub/status | grep -q '"ready":true'; do
+            sleep 5
+          done
+          echo "Selenium Grid is ready."
+
+      - name: Run Selenium Tests
+        run: mvn test -Dsurefire.suiteXmlFiles=testng_grid.xml
+
+      - name: Generate Allure Report
+        run: allure generate target/allure-results --clean -o target/allure-report
+
+      - name: Prepare Allure Report for GitHub Pages
+        run: |
+          mkdir public
+          cp -r target/allure-report/* public/
+
+      - name: Deploy Allure Report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+
+      - name: Show Allure Report URL
+        run: |
+          echo "## 🔎 Allure Report" >> $GITHUB_STEP_SUMMARY
+          echo "[Ver Reporte](https://${{github.repository_owner}}.github.io/${{github.repository}}/)" >> $GITHUB_STEP_SUMMARY

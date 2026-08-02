@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Ecommerce Suite" parallel="tests">
+
+    <listeners>
+        <listener class-name="com.store.listeners.TestListener"></listener>
+    </listeners>
+
+    <test name="Chrome tests" >
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="com.store.tests.ProductTest"/>
+            <class name="com.store.tests.CartTest"/>
+            <class name="com.store.tests.CheckoutTest"/>
+            <class name="com.store.tests.SecurityTest"/>
+        </classes>
+    </test>
+
+    <test name="Edge tests">
+        <parameter name="browser" value="edge"/>
+        <classes>
+            <class name="com.store.tests.ProductTest"/>
+            <class name="com.store.tests.CartTest"/>
+            <class name="com.store.tests.CheckoutTest"/>
+            <class name="com.store.tests.SecurityTest"/>
+        </classes>
+    </test>
+
+    <test name="Firefox tests">
+        <parameter name="browser" value="firefox"/>
+        <classes>
+            <class name="com.store.tests.ProductTest"/>
+            <class name="com.store.tests.CartTest"/>
+            <class name="com.store.tests.CheckoutTest"/>
+            <class name="com.store.tests.SecurityTest"/>
+        </classes>
+    </test>
+
+</suite>
