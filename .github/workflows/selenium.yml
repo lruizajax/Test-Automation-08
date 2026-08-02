@@ -45,7 +45,7 @@ jobs:
         run: allure --version
 
       - name: Start Selenium Grid
-        run: docker compose -p selenium up -d
+        run: docker compose -p "selenium" up -d
 
       - name: Show running containers
         run: docker ps -a
