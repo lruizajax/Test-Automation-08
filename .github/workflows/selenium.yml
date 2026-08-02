@@ -43,10 +43,10 @@ jobs:
 
       - name: Verify Allure installation
         run: allure --version
-      
+
       - name: Run Selenium Tests
         #run: mvn test -Dsurefire.suiteXmlFiles=testng_grid.xml
-        run: mvn clean verify -Dsurefire.suiteXmlFiles=testng.xml
+        run: mvn clean verify -Dsurefire.suiteXmlFiles=testng_2.xml
 
       - name: Generate Allure Report
         if: always()
