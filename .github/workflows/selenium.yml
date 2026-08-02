@@ -43,38 +43,13 @@ jobs:
 
       - name: Verify Allure installation
         run: allure --version
-
-      - name: Start Selenium Grid
-        run: docker compose -f docker-compose-v3.yml up -d
-
-      - name: Show running containers
-        run: docker ps -a
-
-      - name: Show selenium logs
-        run: docker compose -f docker-compose-v3.yml logs
-
-      - name: Wait for Selenium Grid to be ready
-        run: |
-          echo "Esperando a que Selenium Grid esté listo..."
-          # Reintenta hasta 30 veces con pausas de 3 segundos (90 segundos total)
-          for i in {1..30}; do
-            # -s (silent), -f (fail on error)
-            STATUS=$(curl -s http://localhost:4444/status || echo "offline")
-            if echo "$STATUS" | grep -q '"ready": true'; then
-              echo "✅ Selenium Grid está listo y los nodos están conectados!"
-              exit 0
-            fi
-            echo "⏳ Grid aún no responde (intento $i/30)..."
-            sleep 3
-          done
-          echo "❌ Error: Selenium Grid no inició a tiempo."
-          exit 1
-
+      
       - name: Run Selenium Tests
         #run: mvn test -Dsurefire.suiteXmlFiles=testng_grid.xml
         run: mvn clean verify -Dsurefire.suiteXmlFiles=testng.xml
 
       - name: Generate Allure Report
+        if: always()
         run: allure generate target/allure-results --clean -o target/allure-report
 
       - name: Prepare Allure Report for GitHub Pages
