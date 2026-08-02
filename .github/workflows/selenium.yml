@@ -45,13 +45,13 @@ jobs:
         run: allure --version
 
       - name: Start Selenium Grid
-        run: docker compose -p "selenium" up -d
+        run: docker compose -f docker-compose-v3.yml up -d
 
       - name: Show running containers
         run: docker ps -a
 
       - name: Show selenium logs
-        run: docker compose logs
+        run: docker compose -f docker-compose-v3.yml logs
 
       - name: Wait for Selenium Grid to be ready
         run: |
